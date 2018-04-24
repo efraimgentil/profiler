@@ -5,8 +5,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
 public class ProfilerApplicationTests {
 
 	private final ApplicationContextRunner contextRunner = new ApplicationContextRunner();
