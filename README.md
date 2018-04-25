@@ -13,5 +13,5 @@ in the correct object, and were they will be read and be used to configure the b
 # boolean value, sets if its going to log in sout (false will try to use Sl4j)
 profiler.printToSout=true\
 # boolean value, sets if its going to log the properties from the methods
-profiler.logProperties=true
+profiler.logParameters=true
 ```

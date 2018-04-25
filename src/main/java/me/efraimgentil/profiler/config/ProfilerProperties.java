@@ -8,13 +8,13 @@ import java.io.Serializable;
 public class ProfilerProperties implements Serializable {
 
     private boolean printToSout;
-    private boolean logProperties;
+    private boolean logParameters;
 
     @Override
     public String toString() {
         return "ProfilerProperties{" +
                 "printToSout=" + printToSout +
-                ", logProperties=" + logProperties +
+                ", logParameters=" + logParameters +
                 '}';
     }
 
@@ -26,11 +26,11 @@ public class ProfilerProperties implements Serializable {
         this.printToSout = printToSout;
     }
 
-    public boolean isLogProperties() {
-        return logProperties;
+    public boolean isLogParameters() {
+        return logParameters;
     }
 
-    public void setLogProperties(boolean logProperties) {
-        this.logProperties = logProperties;
+    public void setLogParameters(boolean logParameters) {
+        this.logParameters = logParameters;
     }
 }

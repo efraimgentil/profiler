@@ -34,7 +34,7 @@ public class ProfilerAspect {
     public Object profile(ProceedingJoinPoint joinPoint) throws Throwable {
         long beforeStart = System.currentTimeMillis();
 
-        if(profilerProperties.isLogProperties()){
+        if(profilerProperties.isLogParameters()){
             profilerLogger.logParameters(joinPoint);
         }
 
