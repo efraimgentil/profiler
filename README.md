@@ -15,3 +15,9 @@ profiler.printToSout=true\
 # boolean value, sets if its going to log the properties from the methods
 profiler.logParameters=true
 ```
+
+### Stack
+
+- Java 8
+- Spring Boot 2
+- AspectJ
