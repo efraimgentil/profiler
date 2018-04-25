@@ -9,12 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Aspect
 @Component
 public class ProfilerAspect {
 
     private final ProfilerProperties profilerProperties;
     private final ProfilerLogger profilerLogger;
+
+    private final String messageTemplate = "Took %d milliseconds to execute the method %s";
 
     @Autowired
     public ProfilerAspect(ProfilerProperties profilerProperties) {
@@ -30,22 +34,41 @@ public class ProfilerAspect {
     public Object profile(ProceedingJoinPoint joinPoint) throws Throwable {
         long beforeStart = System.currentTimeMillis();
 
+        if(profilerProperties.isLogProperties()){
+            profilerLogger.logParameters(joinPoint);
+        }
+
         Object proceed = joinPoint.proceed();
 
-        profilerLogger.log(beforeStart, joinPoint);
+        profilerLogger.logExecutiontime(beforeStart, joinPoint);
 
         return proceed;
     }
 
 
     abstract class ProfilerLogger{
-        abstract void log(long beforeStartTime , ProceedingJoinPoint joinPoint );
+
+        abstract void log( String message );
+
+        protected final void logExecutiontime(long beforeStartTime , ProceedingJoinPoint joinPoint ){
+            String name = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
+            log( String.format(messageTemplate , (System.currentTimeMillis() - beforeStartTime) , name) );
+        }
+
+        protected final void logParameters(ProceedingJoinPoint joinPoint){
+            String name = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
+            StringBuilder calling_method_ = new StringBuilder("Calling method ")
+                    .append(name).append(" with parameters [");
+            Arrays.stream(joinPoint.getArgs()).forEach(o -> calling_method_.append(", \n\t").append(o));
+            if(joinPoint.getArgs().length > 0) calling_method_.append("\n");
+            log(calling_method_.append("]").toString());
+        }
     }
 
     class SoutLogger extends ProfilerLogger{
         @Override
-        public void log(long beforeStartTime, ProceedingJoinPoint joinPoint) {
-            System.out.println(String.format("Took %d milliseconds to execute", (System.currentTimeMillis() - beforeStartTime)));
+        public void log(String message) {
+            System.out.println(message);
         }
     }
 
@@ -58,9 +81,10 @@ public class ProfilerAspect {
         }
 
         @Override
-        public void log(long beforeStartTime, ProceedingJoinPoint joinPoint) {
-            logger.info(String.format("Took %d milliseconds to execute", (System.currentTimeMillis() - beforeStartTime)));
+        public void log(String message) {
+            logger.info(message);
         }
+
     }
 
 }
